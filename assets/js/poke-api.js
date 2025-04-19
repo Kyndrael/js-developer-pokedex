@@ -1,4 +1,3 @@
-
 const pokeApi = {}
 
 function convertPokeApiDetailToPokemon(pokeDetail) {
@@ -32,4 +31,17 @@ pokeApi.getPokemons = (offset = 0, limit = 5) => {
         .then((pokemons) => pokemons.map(pokeApi.getPokemonDetail))
         .then((detailRequests) => Promise.all(detailRequests))
         .then((pokemonsDetails) => pokemonsDetails)
+}
+
+// 🔍 Função para buscar Pokémon por nome
+pokeApi.getPokemonDetailByName = (name) => {
+    const url = `https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`
+    return fetch(url)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Pokémon não encontrado')
+            }
+            return response.json()
+        })
+        .then(convertPokeApiDetailToPokemon)
 }
